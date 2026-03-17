@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="ckb">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پرسیاری ئیسلامی | ١٨٠ پرسیاری ناوازە</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e3c32 0%, #2a4a3f 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            direction: rtl;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0b2b23 0%, #1a3f35 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 4px solid #d4a373;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            background: #f0f4f3;
+            padding: 20px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .stat-box {
+            text-align: center;
+            background: white;
+            padding: 10px 25px;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-box span {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #0b2b23;
+            display: block;
+        }
+
+        .stat-box label {
+            color: #555;
+            font-size: 1rem;
+        }
+
+        .quiz-area {
+            padding: 30px;
+            background: #f9fbfa;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #d4a373, #b5835a);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .question-counter {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: #0b2b23;
+            font-weight: 600;
+        }
+
+        .question-box {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            color: #0b2b23;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-weight: 500;
+            border-right: 4px solid #d4a373;
+            padding-right: 20px;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .option {
+            background: #f5f7f7;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option:hover:not(.disabled-option) {
+            background: #e8f0ed;
+            border-color: #2a4a3f;
+        }
+
+        .option.selected {
+            background: #0b2b23;
+            color: white;
+            border-color: #d4a373;
+        }
+
+        .option.correct {
+            background: #28a745;
+            color: white;
+            border-color: #1e7e34;
+        }
+
+        .option.wrong {
+            background: #dc3545;
+            color: white;
+            border-color: #bd2130;
+        }
+
+        .option.disabled-option {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .option-prefix {
+            width: 30px;
+            height: 30px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .selected .option-prefix {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .nav-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .prev-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .next-btn {
+            background: #0b2b23;
+            color: white;
+        }
+
+        .reset-btn {
+            background: #dc3545;
+            color: white;
+            width: 100%;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #0b2b23;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .result-screen {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 20px;
+            margin: 20px;
+        }
+
+        .result-screen h2 {
+            color: #0b2b23;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .result-score {
+            font-size: 4rem;
+            color: #d4a373;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .result-message {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .warning-message {
+            background: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .nav-buttons {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .nav-btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📖 زانستی ئیسلامی</h1>
+            <p>١٨٠ پرسیاری ناوازە لەسەر قورئان و پێغەمبەران</p>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-box">
+                <span id="score">0</span>
+                <label>خاڵ</label>
+            </div>
+            <div class="stat-box">
+                <span id="answered-count">0</span>
+                <label>وەڵامدراوە</label>
+            </div>
+            <div class="stat-box">
+                <span id="remaining-count">180</span>
+                <label>ماوە</label>
+            </div>
+        </div>
+
+        <div class="quiz-area" id="quiz-area">
+            <!-- JavaScript دینامیک پڕ دەکاتەوە -->
+        </div>
+
+        <div class="footer">
+            <p>﷽ • بە ناوی خوای میهرەبان و دلۆڤان</p>
+        </div>
+    </div>
+
+    <script>
+        // ١٨٠ پرسیاری ئیسلامی بە ٤ هەڵبژاردە
+        const questions = [
+            // =============== قورئان (١-٦٠) ===============
+            // ١-١٠
+            {
+                question: "یەکەم سورەت قورئان کامەیە؟",
+                options: ["البقرة", "الفاتحة", "الناس", "الإخلاص"],
+                correct: 1,
+                category: "قورئان"
+            },
+            {
+                question: "کۆتایی سورەت قورئان کامە؟",
+                options: ["الفلق", "الناس", "الإخلاص", "المسد"],
+                correct: 1,
+                category: "قورئان"
+            },
+            {
+                question: "قورئان لە کەی دابه زی بوو؟",
+                options: ["شەعبان", "رمضان", "محرم", "رجب"],
+                correct: 1,
+                category: "قورئان"
+            },
+            {
+                question: "ئه م شه له قورئان چییە؟",
+                options: ["لیلة القدر", "لیلة المعراج", "لیلة الجمعة", "لیلة البراءة"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "ژمارەی سورەته کانی قورئان چەندە؟",
+                options: ["١١٤", "١١٠", "١٢٠", "١١٣"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "گەورەترین سورەت کامە؟",
+                options: ["البقرة", "آل عمران", "النساء", "المائدة"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "کورتترین سورەت کامە؟",
+                options: ["الکوثر", "العصر", "الفلق", "الناس"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "یس بە چی ناسراوە؟",
+                options: ["دڵی قورئان", "سەروەری قورئان", "نوری قورئان", "ڕەحمەتی قورئان"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەیەک کە بە دوو نور ناسراوە؟",
+                options: ["الفلق و الناس", "البقرة و آل عمران", "یس و الرحمن", "الکهف و مریم"],
+                correct: 1,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی کهف لە چ ڕۆژێ خوێندرێت؟",
+                options: ["دووشەممە", "هەینی", "شەممە", "یەکشەممە"],
+                correct: 1,
+                category: "قورئان"
+            },
+            // ١١-٢٠
+            {
+                question: "سورەیەک کە بە ناوی ئاژەڵە؟",
+                options: ["البقرة", "النحل", "الفیل", "العنكبوت"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەیەک کە بە ناوی مێرووله ؟",
+                options: ["النمل", "النحل", "العنكبوت", "الذباب"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەتێکه که جبرائیل تێدا باسی کردووه",
+                options: ["جبرائیل", "محمد", "مریم", "میکائیل"],
+                correct: 2,
+                category: "قورئان"
+            },
+            {
+                question: "سورەتی الناس باس لە چی دەکات؟",
+                options: ["خەلق", "شەڕ", "پەنابردن لە شەیتان", "پەنابردن لە مرۆڤ"],
+                correct: 2,
+                category: "قورئان"
+            },
+            {
+                question: "سورەتی الفیل باس لە چی دەکات؟",
+                options: ["فیل و هێرش", "هێرشی ئەبرەهە", "پێغەمبەر", "ئەسحاب الفیل"],
+                correct: 1,
+                category: "قورئان"
+            },
+            {
+                question: "سورەتی الإخلاص باسی چی دەکات؟",
+                options: ["یەکتاپەرستی", "پێغەمبەران", "بەهەشت", "دۆزەخ"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەتی الفلق باسی چی دەکات؟",
+                options: ["پەنابردن لە شەر", "نوور", "خێر", "بەرەکەت"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەته که که به (دایکی قورئان) ناسراوە؟",
+                options: ["الفاتحة", "البقرة", "یس", "الکهف"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "ژمارەی ئایەتەکانی قورئان چەندە؟",
+                options: ["٦٢٣٦", "٦٢٠٠", "٦٣٠٠", "٦٢٥٠"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەته که که به (پارێزەری قورئان) ناسراوە؟",
+                options: ["الملك", "السجدة", "الواقعة", "الرحمن"],
+                correct: 0,
+                category: "قورئان"
+            },
+            // ٢١-٣٠
+            {
+                question: "ئه و سوره ته ی باس له الرحمن دەکات؟",
+                options: ["نیعمەتەکانی خودا", "شەڕ", "بەهەشت", "دۆزەخ"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەتی الواقعة باسی چی دەکات؟",
+                options: ["ڕۆژی قیامەت", "مردن", "ژیان", "بەهەشت"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەتی الملک باسی چی دەکات؟",
+                options: ["دەسەڵاتی خودا", "فریشتەکان", "ئاسمان", "زەوی"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەتی الكهف چەند چیرۆکی تێدایە؟",
+                options: ["سێ", "چوار", "پێنج", "شەش"],
+                correct: 1,
+                category: "قورئان"
+            },
+            {
+                question: "سورەتی مریم باسی کێ دەکات؟",
+                options: ["مریم و عیسا", "مریم و موسا", "مریم و ئیبراهیم", "مریم و زەکەریا"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەتی یوسف باسی کێ دەکات؟",
+                options: ["یوسف", "یعقوب", "هەردووکیان", "پێغەمبەران"],
+                correct: 2,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی طه باسی کێ دەکات؟",
+                options: ["موسا", "عیسا", "محمد", "هارون"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەیەک کە ناوی پێغەمبەرێکە؟",
+                options: ["محمد", "أحمد", "طه", "یس"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی سبأ باسی کێ دەکات؟",
+                options: ["قەومی سبأ", "پێغەمبەر", "مەلەکە", "خودا"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی الأحزاب باسی کێ دەکات؟",
+                options: ["خێزانی پێغەمبەر", "پێغەمبەران", "هاوەڵان", "دوژمنان"],
+                correct: 0,
+                category: "قورئان"
+            },
+            // ٣١-٤٠
+            {
+                question: "سورەی الشوری باسی چی دەکات؟",
+                options: ["ڕاوێژ", "شەڕ", "ئاشتی", "دادپەروەری"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی الدخان باسی چی دەکات؟",
+                options: ["دووکەڵ", "ئاگر", "بەهەشت", "دۆزەخ"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی الجاثیة باسی چی دەکات؟",
+                options: ["چۆکدادان", "بەهەشت", "دۆزەخ", "قیامەت"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی محمد باسی کێ دەکات؟",
+                options: ["پێغەمبەر محمد", "پێغەمبەران", "موسڵمانان", "بێ باوەڕان"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی الفتح باسی چی دەکات؟",
+                options: ["سەرکەوتن", "شەڕ", "ئاشتی", "کۆچ"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی الحجرات باسی چی دەکات؟",
+                options: ["ڕەوشتی موسڵمانان", "ژنان", "پیاوان", "هاوەڵان"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی ق باسی چی دەکات؟",
+                options: ["قیامەت", "مردن", "ژیان", "خودا"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی الذاریات باسی چی دەکات؟",
+                options: ["بایەکان", "فرشتەکان", "هەسارەکان", "ئەستێرەکان"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی الطور باسی چی دەکات؟",
+                options: ["کێوی طور", "کێوی سینا", "کێوی ئەحد", "کێوی نور"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی النجم باسی چی دەکات؟",
+                options: ["ئەستێرە", "مانگ", "خۆر", "هەسارە"],
+                correct: 0,
+                category: "قورئان"
+            },
+            // ٤١-٥٠
+            {
+                question: "سورەی القمر باسی چی دەکات؟",
+                options: ["مانگ", "خۆر", "ئەستێرە", "زەوی"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی الحاقة باسی چی دەکات؟",
+                options: ["ڕۆژی قیامەت", "بەهەشت", "دۆزەخ", "مردن"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی المعارج باسی چی دەکات؟",
+                options: ["پەیژەکان", "ئاسمان", "زەوی", "فریشتەکان"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی نوح باسی کێ دەکات؟",
+                options: ["نوح", "ئیبراهیم", "موسا", "عیسا"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی الجن باسی کێ دەکات؟",
+                options: ["پەری", "فریشتە", "مرۆڤ", "شەیتان"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی المزمل باسی کێ دەکات؟",
+                options: ["پێغەمبەر", "پەری", "فریشتە", "مرۆڤ"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی المدثر باسی کێ دەکات؟",
+                options: ["پێغەمبەر", "پەری", "فریشتە", "مرۆڤ"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی القیامة باسی چی دەکات؟",
+                options: ["ڕۆژی قیامەت", "مردن", "ژیان", "بەهەشت"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی الإنسان باسی کێ دەکات؟",
+                options: ["مرۆڤ", "پێغەمبەر", "فریشتە", "پەری"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی المرسلات باسی چی دەکات؟",
+                options: ["نێردراوەکان", "فریشتەکان", "پێغەمبەران", "هاوەڵان"],
+                correct: 0,
+                category: "قورئان"
+            },
+            // ٥١-٦٠
+            {
+                question: "سورەی النبأ باسی چی دەکات؟",
+                options: ["هەواڵی گەورە", "مردن", "ژیان", "قیامەت"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی النازعات باسی چی دەکات؟",
+                options: ["فریشتەکانی مردن", "فریشتەکانی بەهەشت", "فریشتەکانی دۆزەخ", "فریشتەکانی ڕەحمەت"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی عبس باسی کێ دەکات؟",
+                options: ["پێغەمبەر", "کوێر", "دەوڵەمەند", "هەژار"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی التکویر باسی چی دەکات؟",
+                options: ["ڕۆژی قیامەت", "خۆر", "مانگ", "ئەستێرە"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی الانفطار باسی چی دەکات؟",
+                options: ["ئاسمان", "زەوی", "ڕۆژی قیامەت", "خۆر"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی المطففین باسی کێ دەکات؟",
+                options: ["فڕۆكەکان", "دەوڵەمەندان", "هەژاران", "بازرگانان"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی الانشقاق باسی چی دەکات؟",
+                options: ["ئاسمان", "زەوی", "ڕۆژی قیامەت", "خۆر"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی البروج باسی چی دەکات؟",
+                options: ["ئەستێرەکان", "مانگ", "خۆر", "هەسارەکان"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی الطارق باسی چی دەکات؟",
+                options: ["ئەستێرەی شەوانە", "مانگ", "خۆر", "هەسارە"],
+                correct: 0,
+                category: "قورئان"
+            },
+            {
+                question: "سورەی الأعلى باسی چی دەکات؟",
+                options: ["خودا", "پێغەمبەر", "قورئان", "ئیسلام"],
+                correct: 0,
+                category: "قورئان"
+            },
+
+            // =============== پێغەمبەران (٦١-١٢٠) ===============
+            // ٦١-٧٠
+            {
+                question: "یەکەم پێغەمبەر کێیە؟",
+                options: ["نوح", "آدم", "إبراهیم", "موسى"],
+                correct: 1,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "کۆتایی پێغەمبەران کێیە؟",
+                options: ["عیسی", "محمد", "موسى", "إبراهیم"],
+                correct: 1,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە لە کەشتیەکدا ڕزگار بوو؟",
+                options: ["یونس", "نوح", "صالح", "هود"],
+                correct: 1,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە لە ناو ماسی بوو؟",
+                options: ["یونس", "یوسف", "داوود", "سلیمان"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە خەونی بەراستی دەبینی؟",
+                options: ["یوسف", "إبراهیم", "موسى", "داوود"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "باوکی پێغەمبەران کێیە؟",
+                options: ["آدم", "إبراهیم", "نوح", "موسى"],
+                correct: 1,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "چ پێغەمبەرێک کە تەوراتی پێدرا؟",
+                options: ["عیسی", "موسى", "داوود", "محمد"],
+                correct: 1,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "زەبوور بۆ کێ ناردرا بوو؟",
+                options: ["داوود", "سلیمان", "موسى", "عیسی"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "ئینجیل بۆ کێ ناردرا بوو؟",
+                options: ["عیسی", "موسى", "محمد", "داوود"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: " چ پێغەمبەرێک کە قورئانی پێدرا؟",
+                options: ["محمد", "عیسی", "موسى", "إبراهیم"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            // ٧١-٨٠
+            {
+                question: "پێغەمبەری کە قسەی لەگەڵ خودا کرد (كلیم الله)؟",
+                options: ["موسى", "عیسی", "محمد", "إبراهیم"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە (خلیل الله) ناسراوە؟",
+                options: ["محمد", "عیسی", "إبراهیم", "موسى"],
+                correct: 2,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە (روح الله) ناسراوە؟",
+                options: ["موسى", "عیسی", "یحیی", "زەکەریا"],
+                correct: 1,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە (ذبیح الله) ناسراوە؟",
+                options: ["إسماعیل", "ئیسی", "یوسف", "ئیبراهیم"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە دادگه ربوو کاردەکرد؟",
+                options: ["داوود", "موسى", "عیسی", "ئیبراهیم"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "ئه و پێغەمبەره ی کە فەرمانڕەوا بوو؟",
+                options: ["داوود و سلیمان", "موسى و هارون", "عیسی و یحیی", "ئیبراهیم و لوط"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە لە منداڵیدا قسەی کرد؟",
+                options: ["یحیی", "عیسی", "موسى", "سلیمان"],
+                correct: 1,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەر کە ٩٥٠ ساڵ ژیاوە؟",
+                options: ["نوح", "آدم", "إدریس", "ئیبراهیم"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەر کە لە ئاگر ڕزگاری بوو؟",
+                options: ["موسى", "عیسی", "إبراهیم", "نوح"],
+                correct: 2,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەر کە دەریای شەق کرد؟",
+                options: ["موسى", "یوشع", "هارون", "عیسی"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            // ٨١-٩٠
+            {
+                question: "پێغەمبەر کە گەلی عاد بۆ نێردرا؟",
+                options: ["هود", "صالح", "شعیب", "لوط"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەر کە گەلی ثمود بۆ نێردرا؟",
+                options: ["صالح", "هود", "شعیب", "لوط"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەر کە گەلی مدین بۆ نێردرا؟",
+                options: ["شعیب", "صالح", "هود", "لوط"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەر کە گەلی لوط بۆ نێردرا؟",
+                options: ["لوط", "ئیبراهیم", "نوح", "موسى"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەر کە وشتری پێدرابوو؟",
+                options: ["صالح", "هود", "شعیب", "لوط"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەر کە کەعبەی بنیاد نا؟",
+                options: ["ئیبراهیم و ئیسماعیل", "محمد", "نوح", "ئیبراهیم"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەره ی کە ناوی (إسرائیل) ی هەیە؟",
+                options: ["یعقوب", "یوسف", "ئیبراهیم", "ئیسماعیل"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەره ی کە برای هارون بوو؟",
+                options: ["موسى", "عیسی", "ئیبراهیم", "داوود"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەره ی کە کوڕی یعقوب بوو؟",
+                options: ["یوسف", "موسى", "هارون", "داوود"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەره ی کە باوکی یەحیا بوو؟",
+                options: ["زەکەریا", "عیسی", "موسى", "ئیبراهیم"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            // ٩١-١٠٠
+            {
+                question: "پێغەمبەره ی کە بە (نبی الحرب) ناسراوە؟",
+                options: ["محمد", "موسى", "داوود", "یوشع"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەره ی کە شەڕی جالوت کرد؟",
+                options: ["داوود", "طالوت", "یونس", "موسى"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەره ی کە ئەسپی باڵداری هەبوو؟",
+                options: ["سلیمان", "داوود", "محمد", "عیسی"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەره ی کە زمانی باڵنده کانی دەزانی؟",
+                options: ["سلیمان", "داوود", "محمد", "عیسی"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەره ی کە لە کاتی لەدایکبووندا خەتەنە کراو بوو؟",
+                options: ["محمد", "عیسی", "موسى", "ئیبراهیم"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەره ی کە زۆرترین جار لە قورئاندا ناوی هاتووە؟",
+                options: ["موسى", "ئیبراهیم", "نوح", "عیسی"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەره ی کە لە شاری (أيلة) نێژراوە؟",
+                options: ["أیوب", "یونس", "یوسف", "موسى"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەره ی کە بە (ذو النون) ناسراوە؟",
+                options: ["یونس", "أیوب", "یوسف", "دانیال"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەره ی کە بە (أبو البشر) ناسراوە؟",
+                options: ["آدم", "نوح", "محمد", "ئیبراهیم"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەره ی کە بە (شیخ الأنبیاء) ناسراوە؟",
+                options: ["نوح", "ئیبراهیم", "آدم", "موسى"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            // ١٠١-١١٠
+            {
+                question: "پێغەمبەره ی کە زۆر نەخۆشی کشاوە؟",
+                options: ["أیوب", "یونس", "یعقوب", "دانیال"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە فەرمانی (ألق عصاك) ی پێ کرا؟",
+                options: ["موسى", "یوسف", "عیسی", "هارون"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە ٣ ڕۆژ لە ناوەوەی نەهەنگدا بوو؟",
+                options: ["یونس", "موسى", "عیسی", "دانیال"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە خوای پێ وت (اخرج يا أيها الذنب)؟",
+                options: ["یونس", "موسى", "عیسی", "داوود"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "چەند پێغەمبەر لە قورئاندا ناوی هاتووە؟",
+                options: ["٢٥", "٢٨", "٣٠", "٢٤"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە لە ئاسمانەوە خواردنی بۆ دەهات؟",
+                options: ["زەکەریا", "موسى", "عیسی", "مەریەم"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە لە منداڵیدا لە دەریا ڕزگاری بوو؟",
+                options: ["موسى", "عیسی", "یوسف", "نوح"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە لە کاتی منداڵی لە بیر دۆزرایەوە؟",
+                options: ["یوسف", "موسى", "عیسی", "ئیسماعیل"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە خاوەنی پەرتوکێکی گەورە بوو؟",
+                options: ["سلیمان", "داوود", "موسى", "یوسف"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە لەگەڵ قەومەکەیدا بە زەوی دا ڕۆیشت؟",
+                options: ["إدریس", "نوح", "ئیبراهیم", "موسى"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            // ١١١-١٢٠
+            {
+                question: "ئه و هاوه ڵه ی پێغەمبەر لە (كربلاء) شەهید بوو؟",
+                options: ["حسین", "علی", "حەسەن", "محمد"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "ئه و هاوه ڵه ی پێغەمبەر (كوفة) شەهید بوو؟",
+                options: ["علی", "حسین", "حەسەن", "محمد"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە لە (المدينة) نێژراوە؟",
+                options: ["محمد", "ئیبراهیم", "موسى", "عیسی"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە بە (صادق) ناسراوە؟",
+                options: ["محمد", "علی", "حەسەن", "حسین"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە بە (باقر) ناسراوە؟",
+                options: ["محمد باقر", "علی", "حسین", "حەسەن"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە بە (كاظم) ناسراوە؟",
+                options: ["موسى كاظم", "عیسی", "محمد", "علی"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە بە (رضا) ناسراوە؟",
+                options: ["علی رضا", "محمد", "عیسی", "موسى"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە بە (جواد) ناسراوە؟",
+                options: ["محمد جواد", "علی", "حەسەن", "حسین"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە بە (هادي) ناسراوە؟",
+                options: ["علی هادی", "محمد", "عیسی", "موسى"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+            {
+                question: "پێغەمبەری کە بە (عسكري) ناسراوە؟",
+                options: ["حەسەن عسكری", "محمد", "علی", "حسین"],
+                correct: 0,
+                category: "پێغەمبەران"
+            },
+
+            // =============== پێغەمبەر محمد (١٢١-١٥٠) ===============
+            // ١٢١-١٣٠
+            {
+                question: "پێغەمبەر محمد لە کوێ لەدایک بوو؟",
+                options: ["مەدینە", "مەککە", "طائف", "یەمەن"],
+                correct: 1,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "پێغەمبەر محمد کەی لەدایک بوو؟",
+                options: ["٥٧٠ زاینی", "٦٠٠ زاینی", "٥٥٠ زاینی", "٥٨٠ زاینی"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "ناوی دایکی پێغەمبەر چییە؟",
+                options: ["آمنە", "خدیجە", "عائشة", "فاطمە"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "یەکەم وەحی چی بوو؟",
+                options: ["اقرأ", "الحمد", "سبحان", "المدثر"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "غاری حرا چییە؟",
+                options: ["شوێنی وەحی", "شوێنی شەڕ", "شوێنی کۆچ", "شوێنی حەج"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "پێغەمبەر محمد کەی کۆچی کرد؟",
+                options: ["٦٢٢ زاینی", "٦٠٠ زاینی", "٦٣٠ زاینی", "٦٢٠ زاینی"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "ناوی باوکی پێغەمبەر چی بوو؟",
+                options: ["عبد الله", "عبد المطلب", "أبو طالب", "عبد العزیز"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "شیری پێغەمبەر کێ داوە؟",
+                options: ["حلیمە سەعدیە", "ثویبە", "آمنە", "فاطمە"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "یەکەم هاوسەری پێغەمبەر کێ بوو؟",
+                options: ["خدیجە", "عائشە", "سودە", "حفصە"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "پێغەمبەر چەند ساڵ لەگەڵ خەدیجە ژیاوە؟",
+                options: ["٢٥ ساڵ", "٢٠ ساڵ", "٣٠ ساڵ", "١٥ ساڵ"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            // ١٣١-١٤٠
+            {
+                question: "یەکەم شەڕی پێغەمبەر کام بوو؟",
+                options: ["بەدر", "ئوحود", "خەندەق", "حەنین"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "پێغەمبەر لە کام شەڕدا بریندار بوو؟",
+                options: ["ئوحود", "بەدر", "خەندەق", "حەنین"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "پێغەمبەر چەند جار حەجی کردووە؟",
+                options: ["یەک جار", "دوو جار", "سێ جار", "چوار جار"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "پێغەمبەر کەی کۆچی دوایی کرد؟",
+                options: ["٦٣٢ زاینی", "٦٣٠ زاینی", "٦٣٤ زاینی", "٦٣٥ زاینی"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "پێغەمبەر لە کوێ نێژراوە؟",
+                options: ["مەدینە", "مەککە", "قودس", "طائف"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "ناوی مزگەوتی پێغەمبەر لە مەدینە چییە؟",
+                options: ["المسجد النبوی", "المسجد الحرام", "المسجد الأقصی", "مسجد قباء"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "ژمارەی کوڕانی پێغەمبەر چەند بوو؟",
+                options: ["٣", "٢", "٤", "١"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "ژمارەی کچانی پێغەمبەر چەند بوو؟",
+                options: ["٤", "٣", "٥", "٢"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "ناوی کوڕەکانی پێغەمبەر چی بوون؟",
+                options: ["قاسم، عبد الله، إبراهيم", "حەسەن، حسین، محسن", "علی، عثمان، عمر", "زەید، ئەنەس، یاسین"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "ناوی کچەکانی پێغەمبەر چی بوون؟",
+                options: ["فاطمة، رقیة، زینب، أم کلثوم", "عائشة، حفصة، سودة", "میمونة، صفیة، جویریة", "خدیجە، سارە، هاجەر"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            // ١٤١-١٥٠
+            {
+                question: "پێغەمبەر چەند ساڵ لە مەککە مایەوە؟",
+                options: ["٥٣ ساڵ", "٤٠ ساڵ", "٦٠ ساڵ", "٥٠ ساڵ"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "پێغەمبەر چەند ساڵ لە مەدینە مایەوە؟",
+                options: ["١٠ ساڵ", "١٣ ساڵ", "٨ ساڵ", "١٢ ساڵ"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "پێغەمبەر لە چ تەمەنێکدا بوو بە پێغەمبەر؟",
+                options: ["٤٠ ساڵی", "٣٥ ساڵی", "٤٥ ساڵی", "٣٠ ساڵی"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "پێغەمبەر چەند جار عومرەی کردووە؟",
+                options: ["٤ جار", "٣ جار", "٥ جار", "٢ جار"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "دوایین ژنی پێغەمبەر کێ بوو؟",
+                options: ["مەیمونە", "جوەیریە", "سەفیە", "حفصە"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "ناوی خزمەتکاری پێغەمبەر چی بوو؟",
+                options: ["ئەنەس کوڕی مالک", "زەید کوڕی حارثە", "عەبدوڵڵا کوڕی مەسعود", "سەلمان فارسی"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "ناوی ئەسپی پێغەمبەر چی بوو؟",
+                options: ["دڵدڵ", "بوراق", "یعفور", "قصواء"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "ناوی گوێدرێژی پێغەمبەر چی بوو؟",
+                options: ["یعفور", "دڵدڵ", "قصواء", "حەمار"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "یەکەم موئەزین کێ بوو؟",
+                options: ["بیلالی حەبەشی", "عەبدوڵڵا کوڕی ئوم مەکتوم", "سەعدی قەرز", "ئەبو مەحذورە"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+            {
+                question: "پێغەمبەر چەند جار شەڕی کردووە؟",
+                options: ["٢٧ جار", "٢٥ جار", "٣٠ جار", "٢٠ جار"],
+                correct: 0,
+                category: "پێغەمبەر محمد"
+            },
+
+            // =============== هاوەڵان (١٥١-١٦٥) ===============
+            {
+                question: "کام هاوەڵە بە (صدیق) ناسراوە؟",
+                options: ["ئەبو بەکر", "عومەر", "عوسمان", "عەلی"],
+                correct: 0,
+                category: "هاوەڵان"
+            },
+            {
+                question: "کام هاوەڵە بە (فاروق) ناسراوە؟",
+                options: ["عومەر کوڕی خەتتاب", "عەلی کوڕی ئەبو طالب", "عوسمان کوڕی عەفان", "ئەبو بەکر"],
+                correct: 0,
+                category: "هاوەڵان"
+            },
+            {
+                question: "کام هاوەڵە بە (ذو النورین) ناسراوە؟",
+                options: ["عوسمان کوڕی عەفان", "عەلی کوڕی ئەبو طالب", "حەمزە", "جەعفەر"],
+                correct: 0,
+                category: "هاوەڵان"
+            },
+            {
+                question: "کام هاوەڵە بە (شێر) ناسراوە؟",
+                options: ["حەمزە", "عەلی", "خالید کوڕی وەلید", "عومەر"],
+                correct: 0,
+                category: "هاوەڵان"
+            },
+            {
+                question: "خالید کوڕی وەلید بە چی ناسراوە؟",
+                options: ["شمشێری خودا", "فاروق", "صدیق", "ذو النورین"],
+                correct: 0,
+                category: "هاوەڵان"
+            },
+            {
+                question: "یەکەم کەس کە باوەڕی بە پێغەمبەر هێنا؟",
+                options: ["خەدیجە", "ئەبو بەکر", "عەلی", "زەید"],
+                correct: 0,
+                category: "هاوەڵان"
+            },
+            {
+                question: "یەکەم کوڕ کە باوەڕی بە پێغەمبەر هێنا؟",
+                options: ["عەلی", "زەید", "ئەنەس", "عەبدوڵڵا"],
+                correct: 0,
+                category: "هاوەڵان"
+            },
+            {
+                question: "مامەی پێغەمبەر کە شەهید بوو کێ بوو؟",
+                options: ["حەمزە", "عەباس", "ئەبو طالب", "زەبەیر"],
+                correct: 0,
+                category: "هاوەڵان"
+            },
+            {
+                question: "ژنە هاوەڵێک کە زۆر فەرموودەی گێڕاوەتەوە؟",
+                options: ["عائشە", "خەدیجە", "فاطمە", "ئوم سەلمە"],
+                correct: 0,
+                category: "هاوەڵان"
+            },
+            {
+                question: "کام هاوەڵە بە (ترجمان القرآن) ناسراوە؟",
+                options: ["عەبدوڵڵا کوڕی عەباس", "عەبدوڵڵا کوڕی مەسعود", "ئەنەس کوڕی مالک", "زەید کوڕی ثابت"],
+                correct: 0,
+                category: "هاوەڵان"
+            },
+            {
+                question: "کام هاوەڵە زۆرترین فەرموودەی گێڕاوەتەوە؟",
+                options: ["ئەبو هورەیرە", "عەبدوڵڵا کوڕی عومەر", "ئەنەس کوڕی مالک", "عائشە"],
+                correct: 0,
+                category: "هاوەڵان"
+            },
+            {
+                question: "کام هاوەڵە نووسەری وەحی بوو؟",
+                options: ["زەید کوڕی ثابت", "عەلی کوڕی ئەبو طالب", "عوسمان کوڕی عەفان", "ئەبو بەکر"],
+                correct: 0,
+                category: "هاوەڵان"
+            },
+            {
+                question: "کام هاوەڵە قورئانی کۆکردەوە؟",
+                options: ["زەید کوڕی ثابت", "ئەبو بەکر", "عومەر", "عوسمان"],
+                correct: 0,
+                category: "هاوەڵان"
+            },
+            {
+                question: "کام هاوەڵە لە شەڕی موئتە شەهید بوو؟",
+                options: ["جەعفەر کوڕی ئەبو طالب", "حەمزە", "زەید کوڕی حارثە", "عەبدوڵڵا کوڕی ڕەواحە"],
+                correct: 0,
+                category: "هاوەڵان"
+            },
+            {
+                question: "کام هاوەڵە بە (امین الأمة) ناسراوە؟",
+                options: ["ئەبو عوبەیدە کوڕی جەراح", "ئەبو بەکر", "عومەر", "عوسمان"],
+                correct: 0,
+                category: "هاوەڵان"
+            },
+
+            // =============== تێکەڵ (١٦٦-١٨٠) ===============
+            {
+                question: "ژمارەی پێغەمبەران چەندە (بەپێی ڕیوایەت)؟",
+                options: ["١٢٤ هەزار", "١٠ هەزار", "٥٠ هەزار", "١٠٠ هەزار"],
+                correct: 0,
+                category: "تێکەڵ"
+            },
+            {
+                question: "نێردراوەکان (رسول) چەندن؟",
+                options: ["٣١٣", "٣١٥", "٣١٠", "٣٢٠"],
+                correct: 0,
+                category: "تێکەڵ"
+            },
+            {
+                question: "پێغەمبەری کە باوک و دایک نەبوو؟",
+                options: ["آدم", "عیسی", "یوسف", "محمد"],
+                correct: 0,
+                category: "تێکەڵ"
+            },
+            {
+                question: "پێغەمبەری کە بە بێ باوک لەدایک بوو؟",
+                options: ["عیسی", "موسى", "یحیی", "آدم"],
+                correct: 0,
+                category: "تێکەڵ"
+            },
+            {
+                question: "قورئان بە چی ناسراوە؟",
+                options: ["کتێبی پیرۆز", "کتێبی مێژوو", "کتێبی زمان", "کتێبی ئەدەب"],
+                correct: 0,
+                category: "تێکەڵ"
+            },
+            {
+                question: "ژمارەی بەشەکانی قورئان (جوزئ) چەندە؟",
+                options: ["٣٠", "٢٥", "٣٢", "٢٨"],
+                correct: 0,
+                category: "تێکەڵ"
+            },
+            {
+                question: "یەکەم مزگەوت لە ئیسلامدا کامەیە؟",
+                options: ["مسجد قباء", "المسجد النبوی", "المسجد الحرام", "مسجد قبا"],
+                correct: 0,
+                category: "تێکەڵ"
+            },
+            {
+                question: "کەعبە لە کوێ هەڵکەوتووە؟",
+                options: ["مەککە", "مەدینە", "قودس", "طائف"],
+                correct: 0,
+                category: "تێکەڵ"
+            },
+            {
+                question: "درێژترین ئایەتی قورئان کامەیە؟",
+                options: ["ئایەی قەرز", "ئایەی کورسی", "ئایەی دەین", "ئایەی ڕەحمەت"],
+                correct: 0,
+                category: "تێکەڵ"
+            },
+            {
+                question: "پێغەمبەری کە قسەی لەگەڵ خودا کرد؟",
+                options: ["موسى", "عیسی", "محمد", "ئیبراهیم"],
+                correct: 0,
+                category: "تێکەڵ"
+            },
+            {
+                question: "یەکەم کەس کە نوێژی بە پێغەمبەر کرد؟",
+                options: ["عەلی", "ئەبو بەکر", "خەدیجە", "زەید"],
+                correct: 1,
+                category: "تێکەڵ"
+            },
+            {
+                question: "کام هاوەڵە بە (باب العلم) ناسراوە؟",
+                options: ["عەلی کوڕی ئەبو طالب", "عەبدوڵڵا کوڕی عەباس", "عەبدوڵڵا کوڕی مەسعود", "ئەبو هورەیرە"],
+                correct: 0,
+                category: "تێکەڵ"
+            },
+            {
+                question: "ژمارەی هاوەڵان لە فەتحی مەککە چەند بوو؟",
+                options: ["١٠ هەزار", "١٢ هەزار", "١٥ هەزار", "٨ هەزار"],
+                correct: 0,
+                category: "تێکەڵ"
+            },
+            {
+                question: "پێغەمبەری کە (ذبیح الله) ناسراوە؟",
+                options: ["ئیسماعیل", "ئیبراهیم", "ئیسی", "موسى"],
+                correct: 0,
+                category: "تێکەڵ"
+            },
+            {
+                question: "پێغەمبەره ی کە (كلیم الله) ناسراوە؟",
+                options: ["موسى", "عیسی", "محمد", "داوود"],
+                correct: 0,
+                category: "تێکەڵ"
+            }
+        ];
+
+        // پێکهاتەکانی ئەپ
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+        let questionLocked = new Array(questions.length).fill(false);
+        let score = 0;
+
+        const quizArea = document.getElementById('quiz-area');
+        const scoreSpan = document.getElementById('score');
+        const answeredSpan = document.getElementById('answered-count');
+        const remainingSpan = document.getElementById('remaining-count');
+
+        function calculateStats() {
+            const answered = userAnswers.filter(a => a !== null).length;
+            const remaining = questions.length - answered;
+
+            answeredSpan.textContent = answered;
+            remainingSpan.textContent = remaining;
+            scoreSpan.textContent = score;
+        }
+
+        function handleAnswerSelection(optionIndex) {
+            if (questionLocked[currentQuestionIndex] || userAnswers[currentQuestionIndex] !== null) {
+                return;
+            }
+
+            const isCorrect = (optionIndex === questions[currentQuestionIndex].correct);
+            
+            userAnswers[currentQuestionIndex] = optionIndex;
+            
+            if (!isCorrect) {
+                questionLocked[currentQuestionIndex] = true;
+            } else {
+                score++;
+            }
+
+            renderQuestion();
+            calculateStats();
+        }
+
+        function renderQuestion() {
+            const q = questions[currentQuestionIndex];
+            const selectedAnswer = userAnswers[currentQuestionIndex];
+            const isLocked = questionLocked[currentQuestionIndex];
+            const isAnswered = selectedAnswer !== null;
+
+            const prefixes = ["أ", "ب", "ج", "د"];
+
+            let optionsHtml = '';
+            q.options.forEach((opt, idx) => {
+                let optionClass = 'option';
+                
+                if (isLocked || isAnswered) {
+                    optionClass += ' disabled-option';
+                    
+                    if (idx === q.correct) {
+                        optionClass += ' correct';
+                    } else if (idx === selectedAnswer && selectedAnswer !== q.correct) {
+                        optionClass += ' wrong';
+                    }
+                } else if (idx === selectedAnswer) {
+                    optionClass += ' selected';
+                }
+
+                optionsHtml += `
+                    <div class="${optionClass}" data-option-index="${idx}">
+                        <span class="option-prefix">${prefixes[idx]}</span>
+                        ${opt}
+                    </div>
+                `;
+            });
+
+            const progressPercent = ((currentQuestionIndex + 1) / questions.length) * 100;
+
+            let warningMessage = '';
+            if (isLocked && selectedAnswer !== null && selectedAnswer !== q.correct) {
+                warningMessage = `
+                    <div class="warning-message">
+                        ⚠️ وەڵامی هەڵەت دا! ناتوانیت وەڵامی تر بەم پرسیارە بدەیت.
+                        وەڵامی ڕاست: ${q.options[q.correct]}
+                    </div>
+                `;
+            }
+
+            quizArea.innerHTML = `
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${progressPercent}%"></div>
+                </div>
+                <div class="question-counter">
+                    پرسیاری ${currentQuestionIndex + 1} لە ${questions.length}
+                </div>
+                ${warningMessage}
+                <div class="question-box">
+                    <div class="question-text">
+                        <span style="background: #0b2b23; color: white; padding: 5px 15px; border-radius: 50px; font-size: 0.9rem; margin-left: 15px;">
+                            ${q.category}
+                        </span>
+                        ${q.question}
+                    </div>
+                    <div class="options-container" id="options-container">
+                        ${optionsHtml}
+                    </div>
+                </div>
+                <div class="nav-buttons">
+                    <button class="nav-btn prev-btn" ${currentQuestionIndex === 0 ? 'disabled' : ''} onclick="changeQuestion(-1)">
+                        ← پێشتر
+                    </button>
+                    <button class="nav-btn next-btn" ${currentQuestionIndex === questions.length - 1 ? 'disabled' : ''} onclick="changeQuestion(1)">
+                        دواتر →
+                    </button>
+                </div>
+                ${currentQuestionIndex === questions.length - 1 ? `
+                    <button class="nav-btn reset-btn" onclick="showFinalResult()">
+                        تەواوکردنی تاقیکردنەوە
+                    </button>
+                ` : ''}
+            `;
+
+            if (!isLocked && !isAnswered) {
+                document.querySelectorAll('.option').forEach(opt => {
+                    opt.addEventListener('click', function() {
+                        const optionIndex = parseInt(this.dataset.optionIndex);
+                        handleAnswerSelection(optionIndex);
+                    });
+                });
+            }
+        }
+
+        window.changeQuestion = function(direction) {
+            const newIndex = currentQuestionIndex + direction;
+            if (newIndex >= 0 && newIndex < questions.length) {
+                currentQuestionIndex = newIndex;
+                renderQuestion();
+            }
+        };
+
+        window.showFinalResult = function() {
+            const totalAnswered = userAnswers.filter(a => a !== null).length;
+            const percentage = totalAnswered > 0 ? Math.round((score / totalAnswered) * 100) : 0;
+            
+            let message = '';
+            if (score >= 160) message = 'زۆر باش! تۆ شارەزایەکی ئیسلامی بەرزی.';
+            else if (score >= 130) message = 'باشە. کەمێک زیاتر بخوێنە.';
+            else if (score >= 90) message = 'ناوەسطیت. هەوڵ بدە زیاتر بزانیت.';
+            else message = 'پێویستە زیاتر بخوێنیت لەسەر ئیسلام.';
+
+            quizArea.innerHTML = `
+                <div class="result-screen">
+                    <h2>تاقیکردنەوەکەت تەواو بوو!</h2>
+                    <div class="result-score">${score} خاڵ</div>
+                    <div style="font-size: 1.5rem; margin: 10px 0; color: #0b2b23;">
+                        لە ${totalAnswered} وەڵامدراو
+                    </div>
+                    <div class="result-message">${message}</div>
+                    <div style="font-size: 1.2rem; margin: 20px 0; color: #555;">
+                        ڕێژەی سەرکەوتن: ${percentage}%
+                    </div>
+                    <button class="nav-btn reset-btn" onclick="resetQuiz()" style="width: auto; margin: 0 auto;">
+                        دەستپێکردنەوە
+                    </button>
+                </div>
+            `;
+        };
+
+        window.resetQuiz = function() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            questionLocked = new Array(questions.length).fill(false);
+            score = 0;
+            renderQuestion();
+            calculateStats();
+        };
+
+        // دەستپێکردن
+        renderQuestion();
+        calculateStats();
+    </script>
+</body>
+</html>
+</body>
+</html>
